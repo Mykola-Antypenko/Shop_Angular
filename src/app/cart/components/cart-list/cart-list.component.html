@@ -4,6 +4,7 @@
 <div *ngIf="cartElements.length; else elseBlock">
   <div>Products in Cart: </div>
   <div class="cart">
+    <!-- Зачем тут  ng-container ? -->
     <ng-container *ngFor="let item of cartElements; trackBy: trackByElements">
       <app-cart-item
               [cartItem]="item"

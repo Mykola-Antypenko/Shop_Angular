@@ -12,6 +12,11 @@ export class ProductComponent {
 
   constructor() {}
 
+  // объекты передаются по ссылке,
+  // поэтому тут первый параметр будет тот же что и инпут
+  // и тот же что в родительском компоненте
+  // вы тут сделали мутацию этого объекта
+  // и передали его родителю, хотя у родителя и так будет этот мутированный объект
   onAddToCart(product: IProduct, productName: string):void {
     product.availableCount--;
     product.itemsInCart++;
