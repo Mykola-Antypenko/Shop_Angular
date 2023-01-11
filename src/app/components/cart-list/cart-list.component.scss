@@ -1,0 +1,13 @@
+.cart {
+  display: flex;
+  flex-direction: column;
+  .cart__item {
+    border: 1px solid green;
+    margin: 15px 0;
+    padding: 10px;
+  }
+}
+
+.cart__empty {
+  color: red;
+}
