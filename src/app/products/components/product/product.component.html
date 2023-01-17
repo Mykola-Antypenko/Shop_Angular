@@ -9,7 +9,7 @@
     </div>
     <div class="add-to-cart__btn">
         <button class="btn btn-primary"
-                (click)="onAddToCart(productItem, productItem.name)"
+                (click)="onAddToCart(productItem.name)"
                 [disabled]="!productItem.isAvailable || productItem.itemsInCart"
                 [innerHTML]="productItem.itemsInCart? 'In cart': !productItem.isAvailable ? 'Out of stock' : 'Buy'"
                 [ngClass]="productItem.itemsInCart ? 'product--item_cart' : ''"

@@ -12,10 +12,10 @@ export class ProductComponent {
 
   constructor() {}
 
-  onAddToCart(product: IProduct, productName: string):void {
-    product.availableCount--;
-    product.itemsInCart++;
+  onAddToCart(productName: string):void {
+    this.productItem.availableCount--;
+    this.productItem.itemsInCart++;
     console.log(`The product ${productName} was added to cart`);
-    this.addToCartEvent.emit(product);
+    this.addToCartEvent.emit(this.productItem);
   }
 }

@@ -4,14 +4,12 @@
 <div *ngIf="cartElements.length; else elseBlock">
   <div>Products in Cart: </div>
   <div class="cart">
-    <ng-container *ngFor="let item of cartElements; trackBy: trackByElements">
-      <app-cart-item
+      <app-cart-item *ngFor="let item of cartElements; trackBy: trackByElements"
         [cartItem]="item"
         (quantityIncrease)="onQuantityIncrease($event)"
         (quantityDecrease)="onQuantityDecrease($event)"
         (deleteItem)="onDeleteItem($event)"
       ></app-cart-item>
-    </ng-container>
   </div>
 </div>
 <ng-template #elseBlock>
