@@ -1,0 +1,19 @@
+<div class="products-block__item">
+    <div class="products-block__main">
+        <p>Phone name: {{ productItem.name }}</p>
+        <p>Phone description: {{ productItem.description }}</p>
+        <p>Phone price: {{ productItem.price }}</p>
+        <p>Phone OS: {{ productItem.operationSystem }}</p>
+        <p>Is available: {{ productItem.isAvailable }}</p>
+        <p>Amount: {{ productItem.availableCount }}</p>
+    </div>
+    <div class="add-to-cart__btn">
+        <button class="btn btn-primary"
+                (click)="onAddToCart(productItem, productItem.name)"
+                [disabled]="!productItem.isAvailable || productItem.itemsInCart"
+                [innerHTML]="productItem.itemsInCart? 'In cart': !productItem.isAvailable ? 'Out of stock' : 'Buy'"
+                [ngClass]="productItem.itemsInCart ? 'product--item_cart' : ''"
+                [style.background-color]="!productItem.isAvailable ? '#ff0000' : ''"
+        ></button>
+    </div>
+</div>

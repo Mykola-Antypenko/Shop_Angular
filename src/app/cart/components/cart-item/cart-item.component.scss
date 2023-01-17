@@ -1,0 +1,32 @@
+.cart__item {
+  border: 1px solid green;
+  border-radius: 4px;
+  margin: 15px 0;
+  padding: 10px;
+
+  .cart-item-main {
+    display: flex;
+    justify-content: space-between;
+
+    .cart__item-remove {
+      height: 100%;
+    }
+  }
+
+  .cart__item-controls {
+    display: flex;
+
+    .cart__item-input {
+      width: 40px;
+      text-align: center;
+    }
+
+    .cart__item-controller {
+      margin: 0 10px;
+
+      &:first-child {
+        margin-left: 0;
+      }
+    }
+  }
+}

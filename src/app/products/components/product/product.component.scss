@@ -1,0 +1,9 @@
+.add-to-cart__btn {
+  .btn {
+    margin-top: 15px;
+
+    &.product--item_cart {
+      background-color: mediumseagreen;
+    }
+  }
+}
