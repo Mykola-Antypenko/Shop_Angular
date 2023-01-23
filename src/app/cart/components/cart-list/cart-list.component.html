@@ -1,8 +1,10 @@
 <h4>Cart:</h4>
 <p>Total cost: {{this.totalCost}}</p>
 <p>Total quantity: {{this.totalQuantity}}</p>
-<div *ngIf="cartElements.length; else elseBlock">
-  <div>Products in Cart: </div>
+<div *ngIf="!cartService.isEmptyCart(); else elseBlock">
+  <div class="d-flex justify-content-between">Products in Cart:
+    <button class="btn btn-danger" (click)="cartService.removeAllProducts()">Remove all products</button>
+  </div>
   <div class="cart">
       <app-cart-item *ngFor="let item of cartElements; trackBy: trackByElements"
         [cartItem]="item"

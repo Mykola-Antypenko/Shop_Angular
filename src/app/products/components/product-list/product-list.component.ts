@@ -20,7 +20,9 @@ export class ProductListComponent implements OnInit {
   }
 
   addToCart(product: IProduct): void {
-    this.cartService.cartItems.push(product);
-    this.cartService.addCartItem(this.cartService.cartItems);
+    this.cartService.updateProducts();
+    const newCartProducts = this.cartService.cartProducts.concat(product);
+
+    this.cartService.addProduct(newCartProducts);
   }
 }

@@ -1,37 +1,47 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import {BehaviorSubject, Observable, Subject} from 'rxjs';
 import { IProduct } from '../../../products/models/product.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CartService {
-  private cartItemsSubject: Subject<IProduct[]> = new Subject<IProduct[]>();
+  totalCost!: number;
+  totalQuantity!: number;
+  private cartItemsSubject: BehaviorSubject<IProduct[]> = new BehaviorSubject<IProduct[]>([]);
   cartItemsObservable: Observable<IProduct[]> = this.cartItemsSubject.asObservable();
-  cartItems: IProduct[] = [];
+  cartProducts: IProduct[] = [];
 
   constructor() {}
 
-  addCartItem(items: IProduct[]): void {
-    this.cartItems = items;
-    this.cartItemsSubject.next(this.cartItems);
+  getProducts(): IProduct[] {
+    return this.cartItemsSubject.getValue();
+  }
+
+  updateProducts(): void {
+    this.cartProducts = this.cartItemsSubject.value;
+  }
+
+  addProduct(items: IProduct[]): void {
+    this.cartItemsSubject.next(items);
+    this.updateProducts();
   }
 
   getTotalCost(productList: IProduct[]): number {
-    let totalCost: number = 0;
+    this.totalCost = 0;
     productList.forEach((cartItem: IProduct) => {
-      totalCost += cartItem.price * cartItem.itemsInCart;
+      this.totalCost += cartItem.price * cartItem.itemsInCart;
     });
 
-    return totalCost;
+    return this.totalCost;
   }
 
   getTotalQuantity(productList: IProduct[]): number {
-    let totalQuantity = productList.reduce((quantity:number, product: IProduct): number => {
+    this.totalQuantity = productList.reduce((quantity:number, product: IProduct): number => {
       return quantity + product.itemsInCart;
     }, 0);
 
-    return totalQuantity;
+    return this.totalQuantity;
   }
 
   increaseQuantity(product: IProduct): void {
@@ -43,16 +53,29 @@ export class CartService {
     product.itemsInCart--;
     product.availableCount += 1;
     if (product.itemsInCart === 0) {
-      this.deleteItem(product);
+      this.removeProduct(product);
     }
   }
 
-  deleteItem(product: IProduct) {
-    this.cartItems = this.cartItems.filter((item) => {
+  removeProduct(product: IProduct) {
+    this.updateProducts();
+    const updatedCartProducts = this.cartProducts.filter((item) => {
       return item.name !== product.name;
     });
     product.availableCount += product.itemsInCart;
     product.itemsInCart = 0;
-    this.cartItemsSubject.next(this.cartItems);
+    this.cartItemsSubject.next(updatedCartProducts);
+  }
+
+  removeAllProducts():void {
+    this.cartItemsSubject.value.forEach((item: IProduct) => {
+      item.availableCount += item.itemsInCart;
+      item.itemsInCart = 0;
+    });
+    this.cartItemsSubject.next([]);
+  }
+
+  isEmptyCart(): boolean {
+    return this.cartItemsSubject.value.length === 0;
   }
 }

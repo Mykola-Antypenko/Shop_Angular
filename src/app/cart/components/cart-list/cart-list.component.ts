@@ -1,4 +1,4 @@
-import { Component, DoCheck, OnDestroy, OnInit } from '@angular/core';
+import {Component, DoCheck, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import { CartService } from '../../services/cart-service/cart.service';
 import { IProduct } from '../../../products/models/product.interface';
 import { Subscription } from 'rxjs';
@@ -14,7 +14,7 @@ export class CartListComponent implements OnInit, OnDestroy, DoCheck {
   totalCost: number = 0;
   totalQuantity: number = 0;
 
-  constructor(private cartService: CartService) {
+  constructor(public cartService: CartService) {
   }
 
   ngDoCheck() {
@@ -43,7 +43,7 @@ export class CartListComponent implements OnInit, OnDestroy, DoCheck {
   }
 
   onDeleteItem(product: IProduct): void {
-    this.cartService.deleteItem(product);
+    this.cartService.removeProduct(product);
   }
 
   trackByElements(index: number, item: any): number {
