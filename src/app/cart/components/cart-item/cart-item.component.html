@@ -1,8 +1,9 @@
 <div class="cart__item" appHighlight>
     <div class="cart-item-main">
         <div class="cart__item-description">
-            <p>Product name: {{cartItem.name}}</p>
-            <p>Product price: {{cartItem.price}}</p>
+            <p>Product name: {{cartItem.name | uppercase}}</p>
+            <p>Product price: {{cartItem.price | currency : 'USD' : 'symbol'}}</p>
+            <p>Available quantity: {{cartItem.availableCount}}</p>
         </div>
         <button (click)="onDeleteItem(cartItem)"
                 class="cart__item-remove btn btn-danger">x

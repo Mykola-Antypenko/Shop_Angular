@@ -4,6 +4,31 @@
   grid-gap: 20px;
 }
 
+.cart__main {
+  display: flex;
+  justify-content: space-between;
+}
+
 .cart__empty {
   color: red;
+  margin: 30px 0;
+}
+
+.sort-block {
+  display: flex;
+  flex-direction: column;
+
+  .form-select {
+    display: inline-block;
+    width: auto;
+  }
+
+  .form-select,
+  .form-check-input {
+    margin-left: 10px;
+  }
+
+  .form-check-label {
+    margin-bottom: 15px;
+  }
 }

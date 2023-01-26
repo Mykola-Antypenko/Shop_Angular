@@ -1,8 +1,8 @@
 <div class="products-block__item">
     <div class="products-block__main">
-        <p>Phone name: {{ productItem.name }}</p>
+        <p>Phone name: {{ productItem.name | uppercase}}</p>
         <p>Phone description: {{ productItem.description }}</p>
-        <p>Phone price: {{ productItem.price }}</p>
+        <p>Phone price: {{ productItem.price | currency : 'USD' : 'symbol' }}</p>
         <p>Phone OS: {{ productItem.operationSystem }}</p>
         <p>Is available: {{ productItem.isAvailable }}</p>
         <p>Amount: {{ productItem.availableCount }}</p>

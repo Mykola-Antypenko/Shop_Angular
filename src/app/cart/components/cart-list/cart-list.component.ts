@@ -13,6 +13,8 @@ export class CartListComponent implements OnInit, OnDestroy, DoCheck {
   private subscription!: Subscription;
   totalCost: number = 0;
   totalQuantity: number = 0;
+  sortOption: string = 'name';
+  isAscChecked!: boolean;
 
   constructor(public cartService: CartService) {
   }
@@ -48,5 +50,9 @@ export class CartListComponent implements OnInit, OnDestroy, DoCheck {
 
   trackByElements(index: number, item: any): number {
     return item.id;
+  }
+
+  handleSortOrder(sortOrder: HTMLInputElement) {
+    this.isAscChecked = sortOrder.checked;
   }
 }

@@ -72,9 +72,20 @@ export class ProductsService {
       itemsInCart: 0,
     },
   ];
+  products!: Promise<IProduct[]>;
+  isLoaded: boolean = false;
+
   constructor() { }
 
-  getProducts(): IProduct[] {
-    return this.localProducts;
+  getProducts(): Promise<IProduct[]> {
+    this.products = new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(this.localProducts);
+        this.isLoaded = true;
+      }, 1000)
+    })
+      .catch(error => error) as Promise<IProduct[]>;
+
+    return this.products;
   }
 }

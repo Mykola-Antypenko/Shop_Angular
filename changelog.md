@@ -26,5 +26,12 @@ Task 2 Components
 - Added HighlightDirective
 - Used NgClass
 
+Task 4 Pipes
+Pipes were used in components:
+- CartItemComponent (uppercase, currency)
+- CartListComponent (currency, custom orderBy)
+- ProductComponent (uppercase, currency)
+- ProductListComponent (async)
+
 
 

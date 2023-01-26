@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DoCheck, OnInit } from '@angular/core';
 import { ProductsService } from '../../services/product-service/products.service';
 import { IProduct } from '../../models/product.interface';
 import { CartService } from '../../../cart/services/cart-service/cart.service';
@@ -8,8 +8,9 @@ import { CartService } from '../../../cart/services/cart-service/cart.service';
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.scss'],
 })
-export class ProductListComponent implements OnInit {
-  products!: IProduct[];
+export class ProductListComponent implements OnInit, DoCheck {
+  products!: Promise<IProduct[]>;
+  isLoaded: boolean = false;
   constructor(
       private productsService: ProductsService,
       private cartService: CartService
@@ -17,6 +18,10 @@ export class ProductListComponent implements OnInit {
 
   ngOnInit(): void {
     this.products = this.productsService.getProducts();
+  }
+
+  ngDoCheck() {
+    this.isLoaded = this.productsService.isLoaded;
   }
 
   addToCart(product: IProduct): void {

@@ -1,19 +1,44 @@
-<h4>Cart:</h4>
-<p>Total cost: {{this.totalCost}}</p>
-<p>Total quantity: {{this.totalQuantity}}</p>
-<div *ngIf="!cartService.isEmptyCart(); else elseBlock">
-  <div class="d-flex justify-content-between">Products in Cart:
-    <button class="btn btn-danger" (click)="cartService.removeAllProducts()">Remove all products</button>
+<div class="cart-block">
+  <div class="cart__main">
+    <div class="cart__info">
+      <h4>Cart:</h4>
+      <p>Total cost: {{this.totalCost | currency : 'USD' : 'symbol'}}</p>
+      <p>Total quantity: {{this.totalQuantity}}</p>
+    </div>
+    <div class="sort-block">
+      <label class="form-check-label">Sort products by:
+        <select [(ngModel)]="sortOption" class="form-select">
+          <option value="name">Name</option>
+          <option value="availableCount">Quantity</option>
+          <option value="price">Price</option>
+        </select>
+      </label>
+      <label class="form-check-label">
+        By ascending:
+        <input
+          type="checkbox"
+          class="form-check-input"
+          name="sortOrder"
+          #sortOrder
+          (change)="handleSortOrder(sortOrder)"/>
+      </label>
+    </div>
   </div>
-  <div class="cart">
-      <app-cart-item *ngFor="let item of cartElements; trackBy: trackByElements"
+  <div *ngIf="!cartService.isEmptyCart(); else elseBlock">
+    <div class="d-flex justify-content-between">Products in Cart:
+      <button class="btn btn-danger" (click)="cartService.removeAllProducts()">Remove all products</button>
+    </div>
+    <div class="cart">
+      <app-cart-item
+        *ngFor="let item of cartElements | orderBy : sortOption : isAscChecked; trackBy: trackByElements"
         [cartItem]="item"
         (quantityIncrease)="onQuantityIncrease($event)"
         (quantityDecrease)="onQuantityDecrease($event)"
         (deleteItem)="onDeleteItem($event)"
       ></app-cart-item>
+    </div>
   </div>
+  <ng-template #elseBlock>
+    <div class="cart__empty">You have no added products</div>
+  </ng-template>
 </div>
-<ng-template #elseBlock>
-  <div class="cart__empty">You have no added products</div>
-</ng-template>
