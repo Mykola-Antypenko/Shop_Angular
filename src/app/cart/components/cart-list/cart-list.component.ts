@@ -13,7 +13,7 @@ export class CartListComponent implements OnInit, OnDestroy, DoCheck {
   private subscription!: Subscription;
   totalCost: number = 0;
   totalQuantity: number = 0;
-  sortOption: string = 'name';
+  sortOption: keyof IProduct = 'name';
   isAscChecked!: boolean;
 
   constructor(public cartService: CartService) {
