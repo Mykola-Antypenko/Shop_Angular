@@ -6,8 +6,8 @@ import {IProduct} from "../../../products/models/product.interface";
 })
 export class OrderByPipe implements PipeTransform {
 
-  transform(sortArray: IProduct[], sortKey: string, isAsc?: boolean): IProduct[] {
-    sortArray.sort((a: any, b: any): number => {
+  transform(sortArray: IProduct[], sortKey: keyof IProduct, isAsc?: boolean): IProduct[] {
+    sortArray.sort((a: IProduct, b: IProduct): number => {
       if (isAsc) {
         return a[sortKey] > b[sortKey] ? 1 : -1;
       } else {
