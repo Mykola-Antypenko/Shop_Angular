@@ -22,3 +22,29 @@
 .highlighted {
   background-color: #F1F1F1;
 }
+
+.products-page__head {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.product-controllers {
+  display: flex;
+  justify-content: space-between;
+  .btn {
+    margin-top: 15px;
+
+    &.product--item_cart {
+      background-color: mediumseagreen;
+    }
+  }
+}
+
+html, body {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+body { margin: 0; font-family: monospace, serif, sans-serif; }

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
 import { IProduct } from '../../../products/models/product.interface';
 
 @Component({

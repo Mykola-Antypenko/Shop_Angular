@@ -1,0 +1,44 @@
+.alert-container {
+  background: #05112a;
+  color: #f7f9fd;
+  border-radius: 4px;
+  padding: 18px 15px;
+  position: relative;
+  margin: 20px 0;
+  .alert-content {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    &:before {
+      content: '';
+      background-image: url('../../../../assets/icons/exclamation-mark.svg');
+      position: absolute;
+      top: 2px;
+      left: 0;
+      width: 50px;
+      height: 18px;
+      display: inline-block;
+      background-position: 20px center;
+      background-repeat: no-repeat;
+      vertical-align: sub;
+      background-size: 16px 16px;
+    }
+
+    .alert-text {
+      margin: 0 0 0 50px;
+    }
+
+    .alert-close {
+      position: absolute;
+      right: 0;
+      border: none;
+      outline: none;
+      background: transparent;
+      color: #f7f9fd;
+      font-size: 18px;
+      font-weight: bold;
+    }
+  }
+}

@@ -1,4 +1,6 @@
 import { Component, DoCheck, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+
 import { ProductsService } from '../../services/product-service/products.service';
 import { IProduct } from '../../models/product.interface';
 import { CartService } from '../../../cart/services/cart-service/cart.service';
@@ -10,10 +12,11 @@ import { CartService } from '../../../cart/services/cart-service/cart.service';
 })
 export class ProductListComponent implements OnInit, DoCheck {
   products!: Promise<IProduct[]>;
-  isLoaded: boolean = false;
+  isLoaded!: boolean;
   constructor(
       private productsService: ProductsService,
-      private cartService: CartService
+      public cartService: CartService,
+      private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -26,8 +29,11 @@ export class ProductListComponent implements OnInit, DoCheck {
 
   addToCart(product: IProduct): void {
     this.cartService.updateProducts();
-    const newCartProducts = this.cartService.cartProducts.concat(product);
+    this.cartService.addProduct(product);
+  }
 
-    this.cartService.addProduct(newCartProducts);
+  showMore(product: IProduct): void {
+    const link = ['/product', product.id];
+    this.router.navigate(link);
   }
 }

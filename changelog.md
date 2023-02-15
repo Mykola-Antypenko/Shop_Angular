@@ -33,5 +33,14 @@ Pipes were used in components:
 - ProductComponent (uppercase, currency)
 - ProductListComponent (async)
 
+Task 5 Routing
+- A list of products was implemented on the route /product-list
+- From the product we can go to the Product View page (path - /product/:productID) by pressing the button Show more
+- All functionality of cart is available on path /cart (we can go to the cart by pressing the cart button at the top of the page)
+- Process order component will be loaded and displayed if we have no empty cart. (If the cart is empty, the redirect to the product-list will be triggered).
+Process order component have CanLoad and CanActivate guards.
+- The admin page will be available after login with the admin role - have CanLoad and CanActivate guards.
+- On the admin page we can add and edit products. The edit page have resolve guard + CanDeactivate Guard 
+
 
 

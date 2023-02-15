@@ -1,0 +1,9 @@
+<h2 class="login-heading">LOGIN</h2>
+<div class="login-main">
+  <label class="form-check-label">Choose the admin role
+    <input class="form-check-input" type="checkbox" #roleInput (change)="handleRole()"/></label>
+  <button class="btn btn-primary login-button" (click)="onLogin()" >Login</button>
+  <app-go-back></app-go-back>
+</div>
+
+

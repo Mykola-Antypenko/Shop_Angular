@@ -1,11 +1,20 @@
-<h1
-  #appTitle
-  class="main-heading"
-  appStylize
-  [styleConfig]="{ color: 'red', background: 'green', border: '2px solid blue', fontSize: '36px'}"
-></h1>
+<header class="header">
+  <h1
+    #appTitle
+    class="main-heading"
+    appStylize
+    [styleConfig]="{ color: 'red', background: 'green', border: '2px solid blue', fontSize: '36px'}"
+  ></h1>
+  <div class="header-controls">
+    <button class="btn btn-dark header-link" routerLink="/admin/products" *ngIf="loginService.isAdmin && loginService.isLoggedIn">Admin</button>
+    <span class="header__user" *ngIf="!loginService.isAdmin && loginService.isLoggedIn">User</span>
+    <button *ngIf="loginService.isLoggedIn" class="btn btn-secondary header-link" routerLink="/login" (click)="onLogOut()">LogOut</button>
+  </div>
+  <button class="header-link btn btn-info" routerLink="/login" *ngIf="!loginService.isLoggedIn">Login</button>
+</header>
+
 <div class="container">
-  <app-product-list></app-product-list>
-  <app-cart-list></app-cart-list>
+  <router-outlet>
+  </router-outlet>
 </div>
 <app-first></app-first>

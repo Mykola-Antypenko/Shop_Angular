@@ -1,4 +1,4 @@
-import {Component, DoCheck, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import { Component, DoCheck, OnDestroy, OnInit } from '@angular/core';
 import { CartService } from '../../services/cart-service/cart.service';
 import { IProduct } from '../../../products/models/product.interface';
 import { Subscription } from 'rxjs';
@@ -13,7 +13,7 @@ export class CartListComponent implements OnInit, OnDestroy, DoCheck {
   private subscription!: Subscription;
   totalCost: number = 0;
   totalQuantity: number = 0;
-  sortOption: string = 'name';
+  sortOption: keyof IProduct = 'name';
   isAscChecked!: boolean;
 
   constructor(public cartService: CartService) {

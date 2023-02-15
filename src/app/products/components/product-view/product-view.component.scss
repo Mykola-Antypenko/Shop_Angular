@@ -1,0 +1,22 @@
+.product {
+  display: grid;
+  grid-gap: 30px;
+  grid-template-columns: repeat(2, 1fr);
+  margin: 30px auto;
+  width: 80%;
+
+  .product__image {
+    margin: 0 auto;
+    width: 350px;
+    height: 400px;
+  }
+
+  .product__main {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 30px 20px 0;
+    .product-controllers {
+      width: 45%;
+    }
+  }
+}

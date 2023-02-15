@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import {BehaviorSubject, Observable, Subject} from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { IProduct } from '../../../products/models/product.interface';
+import { LocalStorageService } from '../../../core/services/local-storage/local-storage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -8,11 +9,14 @@ import { IProduct } from '../../../products/models/product.interface';
 export class CartService {
   totalCost!: number;
   totalQuantity!: number;
+  countOfProduct: number = 0;
+  isShowAlert: boolean = false;
+  cartMessage: string = 'The cart is empty, please, choose product from the product list page';
   private cartItemsSubject: BehaviorSubject<IProduct[]> = new BehaviorSubject<IProduct[]>([]);
   cartItemsObservable: Observable<IProduct[]> = this.cartItemsSubject.asObservable();
   cartProducts: IProduct[] = [];
 
-  constructor() {}
+  constructor(private localStorageService: LocalStorageService) {}
 
   getProducts(): IProduct[] {
     return this.cartItemsSubject.getValue();
@@ -22,8 +26,13 @@ export class CartService {
     this.cartProducts = this.cartItemsSubject.value;
   }
 
-  addProduct(items: IProduct[]): void {
-    this.cartItemsSubject.next(items);
+  addProduct(item: IProduct): void {
+    item.availableCount--;
+    item.itemsInCart++;
+    this.localStorageService.setItem(`prodInCartId-${item.id}`, JSON.stringify(item));
+    const productItems = this.cartProducts.concat(item);
+    this.cartItemsSubject.next(productItems);
+    this.countOfProduct++;
     this.updateProducts();
   }
 
@@ -65,14 +74,18 @@ export class CartService {
     product.availableCount += product.itemsInCart;
     product.itemsInCart = 0;
     this.cartItemsSubject.next(updatedCartProducts);
+    this.countOfProduct--;
+    this.localStorageService.removeItem(`prodInCartId-${product.id}`);
   }
 
   removeAllProducts():void {
     this.cartItemsSubject.value.forEach((item: IProduct) => {
       item.availableCount += item.itemsInCart;
       item.itemsInCart = 0;
+      this.localStorageService.clear();
     });
     this.cartItemsSubject.next([]);
+    this.countOfProduct = 0;
   }
 
   isEmptyCart(): boolean {
