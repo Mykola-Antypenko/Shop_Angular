@@ -10,7 +10,9 @@
         </button>
     </div>
     <div class="cart__item-controls">
-        <button (click)="onQuantityDecrease(cartItem)"
+        <button
+                *ngIf="cartItem.itemsInCart !== 0"
+                (click)="onQuantityDecrease(cartItem)"
                 class="btn btn-secondary cart__item-controller">-
         </button>
         <input value="{{cartItem.itemsInCart}}" class="cart__item-input"/>

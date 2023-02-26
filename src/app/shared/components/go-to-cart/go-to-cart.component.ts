@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { CartService } from '../../../cart/services/cart-service/cart.service';
 
 @Component({
   selector: 'app-go-to-cart',
@@ -10,7 +9,6 @@ import { CartService } from '../../../cart/services/cart-service/cart.service';
 })
 export class GoToCartComponent {
   constructor(
-    public cartService: CartService,
     private router: Router
   ) {}
 

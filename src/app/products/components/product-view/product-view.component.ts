@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { IProduct } from '../../models/product.interface';
-import { ProductsService } from '../../services/product-service/products.service';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { CartService } from '../../../cart/services/cart-service/cart.service';
+import { ProductsPromiseService } from '../../services/products-promise/products-promise.service';
+import { CartObservableService } from '../../../cart/services/cart-observable/cart-observable.service';
 
 @Component({
   selector: 'app-product-view',
@@ -14,24 +14,23 @@ export class ProductViewComponent implements OnInit {
   isLoaded: boolean = false;
 
   constructor(
-    private productsService: ProductsService,
+    private productsPromiseService :ProductsPromiseService,
     private router: Router,
     private route: ActivatedRoute,
-    private cartService: CartService
+    public cartObservableService: CartObservableService
   ) {}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
-      this.productsService.getProduct(params.get('productID')!)
+      this.productsPromiseService.getProduct(params.get('productID')!)
         .then((product) => {
           this.product = product;
-          this.isLoaded = this.productsService.isLoaded;
+          this.isLoaded = this.productsPromiseService.isLoaded;
         });
     });
   }
 
   onAddToCart():void {
-    this.cartService.updateProducts();
-    this.cartService.addProduct(this.product);
+    this.cartObservableService.addProduct(this.product).subscribe();
   }
 }

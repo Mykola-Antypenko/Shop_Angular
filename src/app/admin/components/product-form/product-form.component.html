@@ -5,7 +5,7 @@
     </h4>
   </div>
   <div class="product-form-body">
-    <form (ngSubmit)="onSaveProduct()" id="product-form" #productForm #form="ngForm">
+    <form (ngSubmit)="isEditPage ? onEditProduct() : onAddProduct()" id="product-form" #productForm #form="ngForm">
       <div class="form-group mb-3">
         <label for="product-id" class="form-label">Product ID</label>
         <input type="text"
@@ -44,21 +44,30 @@
       </div>
       <div class="form-group mb-3">
         <label for="product-os" class="form-label">Product OS</label>
-        <input type="text"
-               class="form-control"
-               id="product-os" name="product-os"
-               placeholder="Product OS"
-               required
-               [(ngModel)]="product.operationSystem">
+        <select class="form-control"
+          id="product-os" name="product-os"
+          required
+          [value]="product.operationSystem"
+          [(ngModel)]="product.operationSystem"
+        >
+          <option>Symbian</option>
+          <option>Android</option>
+          <option>IOS</option>
+          <option>Mobian</option>
+          <option>Bada</option>
+        </select>
       </div>
       <div class="form-group mb-3">
         <label for="product-availability" class="form-label">Is available product</label>
-        <input type="text"
-               class="form-control"
-               id="product-availability" name="product-availability"
-               placeholder="Is available"
-               required
-               [(ngModel)]="product.isAvailable">
+        <select class="form-control"
+                id="product-availability" name="product-availability"
+                required
+                [value]="product.isAvailable"
+                [(ngModel)]="product.isAvailable"
+        >
+          <option>true</option>
+          <option>false</option>
+        </select>
       </div>
       <div class="form-group mb-3">
         <label for="product-amount" class="form-label">Amount on the stock</label>

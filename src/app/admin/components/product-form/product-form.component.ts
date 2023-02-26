@@ -3,9 +3,9 @@ import { ActivatedRoute, Router, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
 
 import { IProduct } from '../../../products/models/product.interface';
-import { ProductsService } from '../../../products/services/product-service/products.service';
 import { CanComponentDeactivate } from '../../../core/guards/can-deactivate.guard';
 import { ModalService } from '../../../shared/services/modal/modal.service';
+import { ProductsPromiseService } from '../../../products/services/products-promise/products-promise.service';
 
 @Component({
   selector: 'app-product-form',
@@ -17,8 +17,10 @@ export class ProductFormComponent implements OnInit, CanComponentDeactivate {
   product!: IProduct;
   originalProduct!: IProduct;
   isSaved!: boolean;
+  isEditPage!: boolean;
+
   constructor(
-    private productsService: ProductsService,
+    private productsPromiseService :ProductsPromiseService,
     private router: Router,
     private route: ActivatedRoute,
     private modalService: ModalService
@@ -27,7 +29,7 @@ export class ProductFormComponent implements OnInit, CanComponentDeactivate {
 
   ngOnInit(): void {
     this.product = {
-      id: null,
+      id: '',
       img: '../../../../assets/product-images/default.jpg',
       name: '',
       description: '',
@@ -36,6 +38,7 @@ export class ProductFormComponent implements OnInit, CanComponentDeactivate {
       availableCount: 0,
       itemsInCart: 0
     }
+    this.isEditPage = this.router.url.includes('edit');
     this.isSaved = false;
     this.route.data.subscribe(({product}) => {
       if (product) {
@@ -45,9 +48,14 @@ export class ProductFormComponent implements OnInit, CanComponentDeactivate {
     });
   }
 
-  onSaveProduct() {
-    this.productsService.saveProductInfo(this.product);
+  onEditProduct() {
+    this.productsPromiseService.editProductInfo(this.product);
     this.isSaved = true;
+    this.router.navigate(['admin/products']);
+  }
+
+  onAddProduct() {
+    this.productsPromiseService.addProduct(this.product);
     this.router.navigate(['admin/products']);
   }
 
@@ -61,7 +69,7 @@ export class ProductFormComponent implements OnInit, CanComponentDeactivate {
     } else {
       if (this.modalService.confirm('Discard?')) {
         this.product = this.originalProduct;
-        this.productsService.saveProductInfo(this.product);
+        this.productsPromiseService.editProductInfo(this.product);
         return true;
       } else {
         return false;

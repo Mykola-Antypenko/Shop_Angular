@@ -19,14 +19,15 @@
           type="checkbox"
           class="form-check-input"
           name="sortOrder"
+          [checked]="isAscChecked"
           #sortOrder
           (change)="handleSortOrder(sortOrder)"/>
       </label>
     </div>
   </div>
-  <div *ngIf="!cartService.isEmptyCart(); else elseBlock">
+  <div *ngIf="cartElements.length; else elseBlock">
     <div class="d-flex justify-content-between">Products in Cart:
-      <button class="btn btn-danger" (click)="cartService.removeAllProducts()">Remove all products</button>
+      <button class="btn btn-danger" (click)="onRemoveAllItems()">Remove all products</button>
     </div>
     <div class="cart">
       <app-cart-item

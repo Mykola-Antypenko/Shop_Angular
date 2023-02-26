@@ -13,8 +13,11 @@
         <p><span class="fw-bold">Amount on the stock: </span>{{ item.availableCount }}</p>
       </div>
       <div>
-        <button (click)="onEditProduct(item.id)" class="btn btn-secondary">
+        <button (click)="onEditProduct(item.id)" class="btn btn-primary">
           Edit product
+        </button>
+        <button (click)="onDeleteProduct(item.id)" class="btn btn-secondary ms-2">
+          Delete product
         </button>
       </div>
     </div>

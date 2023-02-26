@@ -14,8 +14,8 @@ export class LocalStorageService {
     console.log(`The key ${key} with value ${value} was set`);
   }
 
-  getItem(key: string): void {
-    console.log(window.localStorage.getItem(key));
+  getItem(key: string): any {
+    return window.localStorage.getItem(key);
   }
 
   removeItem(key: string): void {
