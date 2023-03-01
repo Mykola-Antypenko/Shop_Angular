@@ -21,6 +21,8 @@ export class ProductViewComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // чтобы избежать использования then in subscribe
+    // надо использовать оператор switchMap
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.productsPromiseService.getProduct(params.get('productID')!)
         .then((product) => {
