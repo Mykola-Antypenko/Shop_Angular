@@ -1,37 +1,33 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
 import { IProduct } from '../../../products/models/product.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CartService {
-  private cartItemsSubject: Subject<IProduct[]> = new Subject<IProduct[]>();
-  cartItemsObservable: Observable<IProduct[]> = this.cartItemsSubject.asObservable();
-  cartItems: IProduct[] = [];
+  totalCost!: number;
+  totalQuantity!: number;
+  countOfProduct: number = 0;
+  isShowAlert: boolean = false;
+  cartMessage: string = 'The cart is empty, please, choose product from the product list page';
 
   constructor() {}
 
-  addCartItem(items: IProduct[]): void {
-    this.cartItems = items;
-    this.cartItemsSubject.next(this.cartItems);
-  }
-
   getTotalCost(productList: IProduct[]): number {
-    let totalCost: number = 0;
+    this.totalCost = 0;
     productList.forEach((cartItem: IProduct) => {
-      totalCost += cartItem.price * cartItem.itemsInCart;
+      this.totalCost += cartItem.price * cartItem.itemsInCart;
     });
 
-    return totalCost;
+    return this.totalCost;
   }
 
   getTotalQuantity(productList: IProduct[]): number {
-    let totalQuantity = productList.reduce((quantity:number, product: IProduct): number => {
+    this.totalQuantity = productList.reduce((quantity:number, product: IProduct): number => {
       return quantity + product.itemsInCart;
     }, 0);
 
-    return totalQuantity;
+    return this.totalQuantity;
   }
 
   increaseQuantity(product: IProduct): void {
@@ -42,17 +38,5 @@ export class CartService {
   decreaseQuantity(product: IProduct): void {
     product.itemsInCart--;
     product.availableCount += 1;
-    if (product.itemsInCart === 0) {
-      this.deleteItem(product);
-    }
-  }
-
-  deleteItem(product: IProduct) {
-    this.cartItems = this.cartItems.filter((item) => {
-      return item.name !== product.name;
-    });
-    product.availableCount += product.itemsInCart;
-    product.itemsInCart = 0;
-    this.cartItemsSubject.next(this.cartItems);
   }
 }

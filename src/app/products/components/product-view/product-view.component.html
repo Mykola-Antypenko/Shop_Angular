@@ -1,0 +1,33 @@
+<div class="products-page__head">
+  <h2 class="main-heading">Product details page</h2>
+  <app-go-to-cart></app-go-to-cart>
+</div>
+<div *ngIf="isLoaded; else elseBlock">
+  <div class="product">
+    <img src="{{product.img}}" alt="product" class="product__image"/>
+    <div class="product__main">
+      <div class="product_main__info">
+        <p class="product__name">{{ product.name | uppercase}}</p>
+        <p class="product__price">{{ product.price | currency : 'USD' : 'symbol' }}</p>
+        <p class="product__description"> {{ product.description }}</p>
+        <p class="product__operation">Phone OS: {{ product.operationSystem }}</p>
+        <p class="product__amount">Amount: {{ product.availableCount }}</p>
+      </div>
+      <div class="product-controllers">
+        <app-go-back></app-go-back>
+        <button class="btn btn-primary"
+                (click)="onAddToCart()"
+                [disabled]="!product.isAvailable || product.itemsInCart"
+                [innerHTML]="product.itemsInCart? 'In cart': !product.isAvailable ? 'Out of stock' : 'Buy'"
+                [ngClass]="product.itemsInCart ? 'product--item_cart' : ''"
+                [style.background-color]="!product.isAvailable ? '#ff0000' : ''"
+        ></button>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #elseBlock>
+  <app-loader></app-loader>
+</ng-template>
+
+

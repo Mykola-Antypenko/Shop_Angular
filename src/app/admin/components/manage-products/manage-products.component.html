@@ -1,0 +1,28 @@
+<button (click)="onAddProduct()" class="btn btn-outline-success mx-4">
+  Add product
+</button>
+<div class="products-block" *ngIf="isLoaded; else elseBlock">
+  <div *ngFor="let item of products | async">
+    <div class="products-block__item">
+      <div class="products-block__main">
+        <p><span class="fw-bold">Product name: </span>{{ item.name | uppercase}}</p>
+        <p><span class="fw-bold">Product description: </span>{{ item.description }}</p>
+        <p><span class="fw-bold">Product price: </span>{{ item.price | currency : 'USD' : 'symbol' }}</p>
+        <p><span class="fw-bold">Product OS: </span>{{ item.operationSystem }}</p>
+        <p><span class="fw-bold">Is available: </span>{{ item.isAvailable }}</p>
+        <p><span class="fw-bold">Amount on the stock: </span>{{ item.availableCount }}</p>
+      </div>
+      <div>
+        <button (click)="onEditProduct(item.id)" class="btn btn-primary">
+          Edit product
+        </button>
+        <button (click)="onDeleteProduct(item.id)" class="btn btn-secondary ms-2">
+          Delete product
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #elseBlock>
+  <app-loader></app-loader>
+</ng-template>

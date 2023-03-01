@@ -1,7 +1,18 @@
-<h2 class="main-heading">All products in the storage:</h2>
-<div class="products-block">
-    <app-product [productItem] = "product"
-                 *ngFor="let product of products"
-                 (addToCartEvent) = "addToCart($event)"
-    ></app-product>
+<app-alert-banner
+  [alertText]="cartService.cartMessage"
+  *ngIf="cartService.isShowAlert"
+></app-alert-banner>
+<div class="products-page__head">
+  <h2 class="main-heading">All products in the storage</h2>
+  <app-go-to-cart></app-go-to-cart>
 </div>
+<div class="products-block" *ngIf="isLoaded; else elseBlock">
+  <app-product [productItem]="product"
+               *ngFor="let product of products | async"
+               (addToCartEvent)="addToCart($event)"
+               (showMoreEvent)="showMore($event)"
+  ></app-product>
+</div>
+<ng-template #elseBlock>
+  <app-loader></app-loader>
+</ng-template>

@@ -1,0 +1,19 @@
+.login-heading {
+  text-align: center;
+}
+
+.login-main {
+  margin: 30px auto 0;
+  display: flex;
+  width: 200px;
+  justify-content: center;
+  flex-direction: column;
+
+  .login-button {
+    margin: 25px 0;
+  }
+
+  .form-check-input {
+    margin-left: 10px;
+  }
+}

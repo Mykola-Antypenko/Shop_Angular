@@ -9,13 +9,15 @@ import { IProduct } from '../../models/product.interface';
 export class ProductComponent {
   @Input() productItem!: IProduct;
   @Output() addToCartEvent: EventEmitter<IProduct> = new EventEmitter<IProduct>();
+  @Output() showMoreEvent: EventEmitter<IProduct> = new EventEmitter<IProduct>();
 
   constructor() {}
 
-  onAddToCart(product: IProduct, productName: string):void {
-    product.availableCount--;
-    product.itemsInCart++;
-    console.log(`The product ${productName} was added to cart`);
-    this.addToCartEvent.emit(product);
+  onAddToCart():void {
+      this.addToCartEvent.emit(this.productItem);
+  }
+
+  onShowMore() {
+    this.showMoreEvent.emit(this.productItem);
   }
 }
