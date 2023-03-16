@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { Location } from '@angular/common';
+import { Store } from "@ngrx/store";
+import * as RouterActions from '../../../core/@ngrx/router/router.actions';
 
 @Component({
   selector: 'app-go-back',
@@ -7,9 +8,9 @@ import { Location } from '@angular/common';
   styleUrls: ['./go-back.component.scss']
 })
 export class GoBackComponent {
-  constructor(private location: Location) {}
+  constructor(private store: Store) {}
 
   goBack(): void {
-    this.location.back();
+    this.store.dispatch(RouterActions.goBack());
   }
 }

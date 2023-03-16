@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { IProduct } from '../../models/product.interface';
 
 @Component({
@@ -6,18 +6,26 @@ import { IProduct } from '../../models/product.interface';
   templateUrl: './product.component.html',
   styleUrls: ['./product.component.scss']
 })
-export class ProductComponent {
-  @Input() productItem!: IProduct;
+export class ProductComponent implements OnInit {
+  @Input() productFromState!: IProduct;
   @Output() addToCartEvent: EventEmitter<IProduct> = new EventEmitter<IProduct>();
   @Output() showMoreEvent: EventEmitter<IProduct> = new EventEmitter<IProduct>();
 
+  productItem!: IProduct;
+
   constructor() {}
 
-  onAddToCart():void {
-      this.addToCartEvent.emit(this.productItem);
+  ngOnInit(): void {
+    this.productItem = { ...this.productFromState };
   }
 
-  onShowMore() {
+  onAddToCart(): void {
+    this.productItem.availableCount--;
+    this.productItem.itemsInCart++;
+    this.addToCartEvent.emit(this.productItem);
+  }
+
+  onShowMore(): void {
     this.showMoreEvent.emit(this.productItem);
   }
 }

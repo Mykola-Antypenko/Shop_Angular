@@ -1,8 +1,8 @@
 <button (click)="onAddProduct()" class="btn btn-outline-success mx-4">
   Add product
 </button>
-<div class="products-block" *ngIf="isLoaded; else elseBlock">
-  <div *ngFor="let item of products | async">
+<div class="products-block" *ngIf="(productsState$ | async)?.loaded; else elseBlock">
+  <div *ngFor="let item of (products$ | async)">
     <div class="products-block__item">
       <div class="products-block__main">
         <p><span class="fw-bold">Product name: </span>{{ item.name | uppercase}}</p>
@@ -16,7 +16,7 @@
         <button (click)="onEditProduct(item.id)" class="btn btn-primary">
           Edit product
         </button>
-        <button (click)="onDeleteProduct(item.id)" class="btn btn-secondary ms-2">
+        <button (click)="onDeleteProduct(item)" class="btn btn-secondary ms-2">
           Delete product
         </button>
       </div>

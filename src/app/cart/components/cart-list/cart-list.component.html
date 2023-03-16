@@ -32,7 +32,7 @@
     <div class="cart">
       <app-cart-item
         *ngFor="let item of cartElements | orderBy : sortOption : isAscChecked; trackBy: trackByElements"
-        [cartItem]="item"
+        [cartFromState]="item"
         (quantityIncrease)="onQuantityIncrease($event)"
         (quantityDecrease)="onQuantityDecrease($event)"
         (deleteItem)="onDeleteItem($event)"

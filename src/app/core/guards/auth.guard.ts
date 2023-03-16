@@ -10,7 +10,9 @@ import {
   Router
 } from '@angular/router';
 import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
 import { LoginService } from '../../login/services/login.service';
+import * as RouterActions from '../@ngrx/router/router.actions';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +20,8 @@ import { LoginService } from '../../login/services/login.service';
 export class AuthGuard implements CanActivate, CanLoad {
   constructor(
     private loginService: LoginService,
-    private router: Router
+    private router: Router,
+    private store: Store
   ) {}
 
   canActivate(
@@ -44,7 +47,7 @@ export class AuthGuard implements CanActivate, CanLoad {
     if (this.loginService.isAdmin) {
       return true;
     } else {
-      this.router.navigate(['/login']);
+      this.store.dispatch(RouterActions.navigate({path: ['/login']}));
       return false;
     }
   }

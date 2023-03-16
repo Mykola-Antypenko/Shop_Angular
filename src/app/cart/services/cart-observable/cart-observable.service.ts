@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { catchError, concatMap, Observable, retry, share, Subject } from 'rxjs';
+import { catchError, Observable, retry, share } from 'rxjs';
+import { Store } from "@ngrx/store";
+
 import { IProduct } from '../../../products/models/product.interface';
 import { LocalStorageService } from '../../../core/services/local-storage/local-storage.service';
 import { ProductsPromiseService } from '../../../products/services/products-promise/products-promise.service';
-
 
 @Injectable({
   providedIn: 'root'
@@ -26,12 +27,11 @@ export class CartObservableService {
   }
 
   addProduct(item: IProduct): Observable<IProduct> {
-    item.availableCount--;
-    item.itemsInCart++;
-    this.localStorageService.setItem(`prodInCartId-${item.id}`, JSON.stringify(item));
+    const product = { ...item };
+    this.localStorageService.setItem(`prodInCartId-${product.id}`, JSON.stringify(product));
     const url = this.cartUrl;
     this.getProductsFromCart().subscribe();
-    return this.httpClient.post<IProduct>(url, item)
+    return this.httpClient.post<IProduct>(url, product)
       .pipe(
         catchError(this.handleError)
       );
@@ -39,14 +39,14 @@ export class CartObservableService {
 
   removeProductFromCart(product: IProduct): Observable<IProduct[]> {
     const url = `${this.cartUrl}/${product.id}`;
-    product.availableCount += product.itemsInCart;
-    product.itemsInCart = 0;
-    this.localStorageService.removeItem(`prodInCartId-${product.id}`);
-    this.productsPromiseService.updateProduct(product);
+    const updatedProduct = { ...product };
+    updatedProduct.availableCount += updatedProduct.itemsInCart;
+    updatedProduct.itemsInCart = 0;
+    this.localStorageService.removeItem(`prodInCartId-${updatedProduct.id}`);
+    this.productsPromiseService.updateProduct(updatedProduct);
     this.getProductsFromCart().subscribe();
     return this.httpClient.delete<IProduct>(url)
       .pipe(
-        concatMap(() => this.getProductsFromCart()),
         catchError(this.handleError)
       );
   }

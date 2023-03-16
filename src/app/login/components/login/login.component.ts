@@ -1,6 +1,8 @@
 import {Component, ElementRef, ViewChild} from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginService } from '../../services/login.service';
+import * as RouterActions from '../../../core/@ngrx/router/router.actions';
+import { Store } from "@ngrx/store";
 
 @Component({
   selector: 'app-login',
@@ -12,13 +14,14 @@ export class LoginComponent {
 
   constructor(
     public loginService: LoginService,
-    private router: Router
+    private router: Router,
+    private store: Store
   ) {}
 
   onLogin(): void {
     this.loginService.logIn();
     if (this.loginService.isLoggedIn) {
-      this.router.navigate(['/']);
+      this.store.dispatch(RouterActions.goHome());
     }
   }
 
