@@ -6,6 +6,10 @@ import { IProduct } from '../../../products/models/product.interface';
 import { CanComponentDeactivate } from '../../../core/guards/can-deactivate.guard';
 import { ModalService } from '../../../shared/services/modal/modal.service';
 import { ProductsPromiseService } from '../../../products/services/products-promise/products-promise.service';
+import { AppState, ProductsFeatureKey } from '../../../core/@ngrx';
+import * as ProductsActions from '../../../core/@ngrx/products/products.actions';
+import { Store } from '@ngrx/store';
+import * as RouterActions from '../../../core/@ngrx/router/router.actions';
 
 @Component({
   selector: 'app-product-form',
@@ -20,10 +24,11 @@ export class ProductFormComponent implements OnInit, CanComponentDeactivate {
   isEditPage!: boolean;
 
   constructor(
-    private productsPromiseService :ProductsPromiseService,
+    private productsPromiseService: ProductsPromiseService,
     private router: Router,
     private route: ActivatedRoute,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private store: Store<AppState>,
   ) {
   }
 
@@ -40,23 +45,23 @@ export class ProductFormComponent implements OnInit, CanComponentDeactivate {
     }
     this.isEditPage = this.router.url.includes('edit');
     this.isSaved = false;
-    this.route.data.subscribe(({product}) => {
-      if (product) {
-        this.product = product;
-        this.originalProduct = Object.assign({}, product);
-      }
-    });
+    if (this.isEditPage) {
+      this.store.select(ProductsFeatureKey).subscribe((productsState) => {
+        this.product = { ...productsState.productItem!};
+        this.originalProduct = { ...productsState.productItem!};
+      });
+    }
   }
 
   onEditProduct() {
-    this.productsPromiseService.editProductInfo(this.product);
+    this.store.dispatch(ProductsActions.EditProduct({ productItem: this.product }));
     this.isSaved = true;
-    this.router.navigate(['admin/products']);
+    this.store.dispatch(RouterActions.navigate({path: ['admin/products']}));
   }
 
   onAddProduct() {
-    this.productsPromiseService.addProduct(this.product);
-    this.router.navigate(['admin/products']);
+    this.store.dispatch(ProductsActions.AddProduct({ productItem: this.product }));
+    this.store.dispatch(RouterActions.navigate({path: ['admin/products']}));
   }
 
   canDeactivate():
@@ -69,7 +74,7 @@ export class ProductFormComponent implements OnInit, CanComponentDeactivate {
     } else {
       if (this.modalService.confirm('Discard?')) {
         this.product = this.originalProduct;
-        this.productsPromiseService.editProductInfo(this.product);
+        this.store.dispatch(ProductsActions.EditProduct({ productItem: this.product }));
         return true;
       } else {
         return false;

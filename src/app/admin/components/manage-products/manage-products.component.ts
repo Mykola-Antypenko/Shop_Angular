@@ -2,6 +2,11 @@ import { Component, DoCheck, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { IProduct } from '../../../products/models/product.interface';
 import { ProductsPromiseService } from '../../../products/services/products-promise/products-promise.service';
+import { Store } from '@ngrx/store';
+import { AppState, ProductsFeatureKey, ProductsState, selectProductsData } from '../../../core/@ngrx';
+import * as ProductsActions from '../../../core/@ngrx/products/products.actions';
+import { Observable } from 'rxjs';
+import * as RouterActions from '../../../core/@ngrx/router/router.actions';
 
 @Component({
   selector: 'app-manage-products',
@@ -11,14 +16,19 @@ import { ProductsPromiseService } from '../../../products/services/products-prom
 export class ManageProductsComponent implements OnInit, DoCheck {
   products!: Promise<IProduct[]>;
   isLoaded!: boolean;
+  productsState$!: Observable<ProductsState>;
+  products$!: Observable<ReadonlyArray<IProduct>>;
 
   constructor(
     private productsPromiseService :ProductsPromiseService,
-    private router: Router
+    private router: Router,
+    private store: Store<AppState>
   ) {}
 
   ngOnInit(): void {
-    this.products = this.productsPromiseService.getProducts();
+    this.productsState$ = this.store.select(ProductsFeatureKey);
+    this.products$ = this.store.select(selectProductsData);
+    this.store.dispatch(ProductsActions.GetProducts());
   }
 
   ngDoCheck() {
@@ -26,19 +36,16 @@ export class ManageProductsComponent implements OnInit, DoCheck {
   }
 
   onAddProduct(): void {
-    this.router.navigateByUrl('/admin/product/add');
+    this.store.dispatch(RouterActions.navigate({path: ['/admin/product/add']}));
   }
 
   onEditProduct(id: string): void {
-    const link = ['/admin/product/edit', id];
-    this.router.navigate(link);
+    this.store.dispatch(RouterActions.navigate({path: ['/admin/product/edit', id]}));
+    this.store.dispatch(ProductsActions.GetProduct({ productID: id}));
   }
 
-  onDeleteProduct(id: string): void {
-    this.productsPromiseService.deleteProduct(id)
-      .then(() => {
-        this.products = this.productsPromiseService.getProducts();
-      })
-      .catch((error) => console.log(error));
+  onDeleteProduct(productItem: IProduct): void {
+    this.store.dispatch(ProductsActions.DeleteProduct({productItem}));
+    this.store.dispatch(ProductsActions.GetProducts());
   }
 }

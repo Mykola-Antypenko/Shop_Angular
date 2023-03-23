@@ -1,47 +1,42 @@
-import { Component, DoCheck, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-
-import { ProductsPromiseService } from '../../services/products-promise/products-promise.service';
-import { IProduct } from '../../models/product.interface';
+import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
 import { CartService } from '../../../cart/services/cart-service/cart.service';
-import { CartObservableService } from "../../../cart/services/cart-observable/cart-observable.service";
+import { IProduct } from '../../models/product.interface';
+import {
+  AppState,
+  ProductsState, selectProductsData, selectProductsState,
+} from "../../../core/@ngrx";
+import * as ProductsActions from '../../../core/@ngrx/products/products.actions';
+import * as CartActions from '../../../core/@ngrx/cart/cart.actions';
+import * as RouterActions from '../../../core/@ngrx/router/router.actions';
 
 @Component({
   selector: 'app-product-list',
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.scss'],
 })
-export class ProductListComponent implements OnInit, DoCheck, OnDestroy {
-  products!: Promise<IProduct[]>;
-  isLoaded!: boolean;
-  private sub!: Subscription;
+export class ProductListComponent implements OnInit {
+  productsState$!: Observable<ProductsState>;
+  products$!: Observable<ReadonlyArray<IProduct>>;
 
   constructor(
-      private productsPromiseService :ProductsPromiseService,
-      public cartObservableService: CartObservableService,
       public cartService: CartService,
-      private router: Router
+      private store: Store<AppState>,
   ) {}
 
   ngOnInit(): void {
-    this.products = this.productsPromiseService.getProducts();
-  }
-
-  ngDoCheck() {
-    this.isLoaded = this.productsPromiseService.isLoaded;
-  }
-
-  ngOnDestroy(): void {
-    this.sub && this.sub.unsubscribe();
+    this.productsState$ = this.store.select(selectProductsState);
+    this.products$ = this.store.select(selectProductsData);
+    this.store.dispatch(ProductsActions.GetProducts());
   }
 
   addToCart(product: IProduct): void {
-    this.sub = this.cartObservableService.addProduct(product).subscribe();
+    this.store.dispatch(CartActions.AddProductToCart({productItem: product}));
+    this.store.dispatch(ProductsActions.EditProduct({productItem: product }));
   }
 
   showMore(product: IProduct): void {
-    const link = ['/product', product.id];
-    this.router.navigate(link);
+    this.store.dispatch(RouterActions.navigate({ path: ['/product', product.id] }))
   }
 }

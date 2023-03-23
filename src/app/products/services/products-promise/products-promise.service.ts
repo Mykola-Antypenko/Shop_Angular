@@ -55,8 +55,8 @@ export class ProductsPromiseService {
       .catch(this.handleError);
   }
 
-  deleteProduct(id: string): Promise<IProduct> {
-    const url = `${this.productsUrl}/${id}`;
+  deleteProduct(productItem: IProduct): Promise<IProduct> {
+    const url = `${this.productsUrl}/${productItem.id}`;
     const request$ = this.httpClient.delete(url);
 
     return firstValueFrom(request$)

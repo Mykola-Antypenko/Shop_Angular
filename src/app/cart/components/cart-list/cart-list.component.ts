@@ -1,5 +1,6 @@
 import { Component, DoCheck, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { Store } from '@ngrx/store';
 
 import { CartService } from '../../services/cart-service/cart.service';
 import { IProduct } from '../../../products/models/product.interface';
@@ -8,6 +9,8 @@ import { ProductsPromiseService } from '../../../products/services/products-prom
 import { AppSettingsService } from "../../../core/services/app-settings/app-settings.service";
 import { IAppSettings } from '../../../core/services/app-settings/app-settings.interface';
 import { LocalStorageService } from '../../../core/services/local-storage/local-storage.service';
+import { AppState, CartFeatureKey } from '../../../core/@ngrx';
+import * as CartActions from '../../../core/@ngrx/cart/cart.actions';
 
 @Component({
   selector: 'app-cart-list',
@@ -20,15 +23,14 @@ export class CartListComponent implements OnInit, OnDestroy, DoCheck {
   totalQuantity: number = 0;
   sortOption!: keyof IProduct;
   isAscChecked!: boolean;
-  private subGetProducts!: Subscription;
-  private subRemoveProduct!: Subscription;
 
   constructor(
     public cartService: CartService,
     private cartObservableService: CartObservableService,
     private productPromiseService: ProductsPromiseService,
     private appSettingsService: AppSettingsService,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    private store: Store<AppState>,
   ) {
   }
 
@@ -38,11 +40,10 @@ export class CartListComponent implements OnInit, OnDestroy, DoCheck {
   }
 
   ngOnInit(): void {
-    this.subGetProducts = this.cartObservableService.getProductsFromCart().subscribe(
-        (data) => {
-          this.cartElements = data;
-        }
-    );
+    this.store.select(CartFeatureKey).subscribe((cartState) => {
+      this.cartElements = cartState.cartList.slice();
+    });
+    this.store.dispatch(CartActions.GetProductsFromCart());
     this.appSettingsService.getSettings().subscribe((sortSettings: IAppSettings) => {
       this.sortOption = sortSettings.sortKey;
       this.isAscChecked = sortSettings.isAsc;
@@ -51,11 +52,7 @@ export class CartListComponent implements OnInit, OnDestroy, DoCheck {
   }
 
   ngOnDestroy(): void {
-    this.subGetProducts && this.subGetProducts.unsubscribe();
-    this.subRemoveProduct && this.subRemoveProduct.unsubscribe();
-    console.log('cancel cart');
     this.cartElements.forEach((element) => {
-      console.log('element', element);
       this.productPromiseService.updateProduct(element);
     })
   }
@@ -69,10 +66,8 @@ export class CartListComponent implements OnInit, OnDestroy, DoCheck {
   }
 
   onDeleteItem(product: IProduct): void {
-    this.subRemoveProduct = this.cartObservableService.removeProductFromCart(product).subscribe((data) => {
-      this.cartElements = data;
-    });
-    this.productPromiseService.updateProduct(product);
+    this.store.dispatch(CartActions.DeleteProductFromCart({cartItem: product}));
+    this.store.dispatch(CartActions.GetProductsFromCart());
   }
   onRemoveAllItems(): void {
     this.cartObservableService.removeAllProducts();
