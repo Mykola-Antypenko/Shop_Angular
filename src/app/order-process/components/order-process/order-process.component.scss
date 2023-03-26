@@ -1,0 +1,38 @@
+.has-error {
+  .form-control {
+    border-color: #a94442;
+  }
+
+  .help-block {
+    display: inline-block;
+    margin: 5px 0 10px 0;
+    color: #a94442;
+  }
+}
+
+.order-page__heading {
+  text-align: center;
+}
+
+.order-page__body {
+  margin: 0 auto;
+  width: 50%;
+
+  .control-label {
+    margin-bottom: 10px;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .control-block {
+    display: flex;
+    gap: 30px;
+  }
+
+  .delivery-method-block {
+    display: flex;
+    gap: 30px;
+  }
+}
