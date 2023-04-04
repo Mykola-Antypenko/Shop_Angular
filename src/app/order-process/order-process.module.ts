@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { OrderProcessRoutingModule } from './order-process-routing.module';
 import { OrderProcessComponent } from "./components/order-process/order-process.component";
 import { SharedModule } from '../shared/shared.module';
+import { ReactiveFormsModule } from '@angular/forms';
+import { CoreModule } from '../core/core.module';
 
 
 @NgModule({
@@ -12,6 +14,8 @@ import { SharedModule } from '../shared/shared.module';
     CommonModule,
     SharedModule,
     OrderProcessRoutingModule,
+    CoreModule,
+    ReactiveFormsModule
   ],
   exports: [
     OrderProcessComponent

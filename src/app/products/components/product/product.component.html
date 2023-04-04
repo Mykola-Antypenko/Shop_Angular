@@ -1,9 +1,9 @@
 <div class="products-block__item">
     <div class="products-block__main">
-        <p>Phone name: {{ productItem.name | uppercase}}</p>
-        <p>Phone price: {{ productItem.price | currency : 'USD' : 'symbol' }}</p>
-        <p>Phone OS: {{ productItem.operationSystem }}</p>
-        <p>Amount: {{ productItem.availableCount }}</p>
+        <p class="product-name">Phone name: {{ productItem.name | uppercase}}</p>
+        <p class="product-price">Phone price: {{ productItem.price | currency : 'USD' : 'symbol' }}</p>
+        <p class="product-os">Phone OS: {{ productItem.operationSystem }}</p>
+        <p class="product-amount">Amount: {{ productItem.availableCount }}</p>
     </div>
     <div class="product-controllers">
         <button class="btn btn-outline-info"
